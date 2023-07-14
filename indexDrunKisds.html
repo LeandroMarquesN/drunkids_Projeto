@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrunKids</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        /* Muito importante usar o border box para resetar o nosso documento https://www.w3schools.com/css/css3_box-sizing.asp*/
+        box-sizing: border-box;
+    }
+    body {
+        background-image: url('./img/back.jpg');
+        background-size: cover;
+        width: 100vw;
+        height: 100vh;
+        font-family: 'Open Sans', sans-serif;
+    }
+    .title{
+        cursor: pointer;
+    }
+    .title:hover{
+        box-shadow: 0 0 20px olive;
+        border-radius: 20px;
+        
+
+    }
+    main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title {
+        color: #ffcc00;
+        margin: 20vh auto;
+        font-size: calc(5vw + 20px);
+        text-shadow: 0 0 20px red,
+                     0 0 20px red,
+                     0 0 20px red,
+                     0 0 20px red;
+    }
+    .container {
+        /* background-color:#00000099; */
+        width: 90vw;
+        height: 100px;
+        margin: 0 auto;
+
+        display: flex;
+
+        /*flex-wrap : wrap; para quebrar  */
+        flex-wrap: wrap;
+
+        align-items: center;
+        justify-content: space-around ;
+
+         /*gap ; para das um spaço quando ele quebra*/
+        gap:15px;
+       
+    }
+    .key {
+        display: flex;
+        width: 100px;
+        height: 100px;
+        align-items: center;
+        justify-content: center ;
+        background-color: #00000077;
+        color: #ffffff;
+        font-size:calc(3vw + 20px) ;
+       
+        border: 2px dotted #ffcc00;
+
+        text-shadow: 0 0 20px red,
+                     0 0 20px red,
+                     0 0 20px red,
+                     0 0 20px red;
+
+        Box-shadow: 0 0 20px red,
+              inset 0 0 20px red,
+              inset 0 0 20px red,
+                    0 0 20px red;
+        border-radius: 20px;
+
+        user-select: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out; 
+    }
+
+
+    /*criei essa class para quando eu dispara um evento na minha função ativar div */ 
+    .key:active {
+        Box-shadow: 0 0 8px red,
+              inset 0 0 20px red,
+              inset 0 0 20px red,
+                    0 0 8px red;
+        border-radius: 50px;
+        font-size:calc(6vw + 20px) ;
+        transform: translatey(-250px);
+        text-transform: lowercase;
+        text-align: center;
+        padding-bottom: 50px;
+          
+    }
+
+    .key:hover {
+        Box-shadow: 0 0 8px orange,
+              inset 0 0 20px darkorange,
+              inset 0 0 20px orange,
+                    0 0 8px orange;
+        border-radius: 50px;
+        font-size:calc(6vw + 20px) ;
+        
+        
+        
+    }
+
+</style>
+</head>
+
+ <!-- mini projeto Drunkids : https://www.youtube.com/watch?v=2qA8tlJ24uQ&t=3142s&ab_channel=FernandoLeonid  
+
+   
+
+-->
+<body>
+   <main>
+        <div class="title">DRUM KIT</div>
+        <div class="container" id="container">
+            <!-- comentei essas divs pois vou crialas dinamincamente pelo javaScript  -->
+            <!-- <div class="key">A</div>
+            <div class="key">S</div>
+            <div class="key">D</div> -->
+        </div>
+   </main>
+
+<script>
+    
+'use strict'
+
+// strict mode elimina alguns erros silenciosos que passariam batido do JavaScript e os faz emitir erros.
+
+// Além disso, essa forma corrige alguns erros que tornam o JavaScript difícil de ser otimizado, então algumas vezes os códigos no modo estrito rodam mais otimizados e velozes do que os códigos no ‘modo normal’.
+
+// https://igluonline.com/o-que-o-use-strict-faz-no-javascript-e-por-que-ele-existe/#:~:text=O%20strict%20mode%20elimina%20alguns,c%C3%B3digos%20no%20'modo%20normal'.
+
+//1ª)  Vamos criar as <div> Dinamicamente pelo javaScrip e vamos criar uma função para fazer isso
+
+
+    //criando o json chamado de sons que vai ajudar na criação da nossas divs.
+
+    const sons = {
+        'A': 'boom.wav',
+        'B': 'clap.wav',
+        'C': 'hihat.wav',
+        'D': 'kick.wav',
+        'E': 'openhat.wav',
+        'F': 'ride.wav',
+        'G': 'snare.wav',
+        'H': 'tink.wav', //ESSE SO É O MAIS PARECIDOCOM SONS DE TECLAS DE TECLADO 
+        'I':'tom.wav',
+        //continua
+        'J': 'boom.wav',
+        'K': 'clap.wav',
+        'L': 'hihat.wav',
+        'M': 'kick.wav',
+        'N': 'openhat.wav',
+        'O': 'ride.wav',
+        'P': 'snare.wav',
+        'Q': 'tink.wav',
+        'R':'tom.wav',
+        //continua
+        'S': 'boom.wav',
+        'T': 'clap.wav',
+        'U': 'hihat.wav',
+        'V': 'kick.wav',
+        'W': 'openhat.wav',
+        'X': 'ride.wav',
+        'Y': 'snare.wav',
+        'Z': 'tink.wav',
+       
+
+    }
+
+
+
+   const criarDiv = (texto) => {
+
+        //Aqui vamos criar uma div
+        const div = document.createElement('div')
+
+        //vamos criar uma class para as div criadas
+        div.classList.add('key')
+
+        //vamos criar um conteudo atraves do parametro texto para as divs
+        div.textContent = texto
+
+        //vamos criara um id para as div também como nessa aplicação os div vao ser chamados de letras vamos usa a mesma logica para aplicar o nome do id usando o parametro texto 
+        div.id =texto
+
+        //agaora vamos inserir as div criadas no (DOM) e vamos usar o elemento div que possui o id container
+
+        document.querySelector('#container').appendChild(div)
+
+
+
+   }
+//    Para criar as div eu posso simplesmente chamar a função criaradiv() passando o parametro do conteudo que quero que seja criado porem para esse proprosito não é a maneira ideal para fazer 
+//    criarDiv('A')
+
+// E para deixar mais dinamico e toda a crição que vai ter na criação e a identificação dos elementos podemos criara um (json) vamos criara um jason com o nome de (sons) e vamos criara o jason antes da função criardiv()
+
+//depois de criado  nosso json vamos criar uma função para exibir os sons na tela.
+
+const exibir = (sons) => {
+    //BOm se  deixarmos o parametro sons a função vai receber a chave e o valor do json e nos queremos somente as chaves entao vamos fazer o codigo abaixo para resolver o problema e com ele vai me retornar um array com todas as keys ou chaves.
+    Object.keys(sons).forEach(criarDiv)
+//    podemos ver aqui o que ele vai retornar no :                 console.log( Object.keys(sons))
+//usamos os forEach para percorrer o array criado e para cada elemento do array vamos chamar a função criarDiv e para cada elemento sera  criado uma <div>
+ 
+}
+
+
+
+//agora vamos criar os eventos do (click para criar) os efeitos dos sons para quando o usuario clciar no botão o son ser reproduzido porem temos que criar um evento para cada div criada e vamos fazer isso dinamicamente agora.
+
+
+//1ª) primeiro temos que capturar o id=container pois ele que está envolvendo as nossas divs criadas e vamos criar um evento do click nele e como ele é o pai das outras divs todo o click dentro dele será capaturado
+
+//2ª)logo apos seleção do container vamos aplicar o addEventListener('clcik') para ele observar o click, e então chamaremos uma função call-back que vai se a ativarDiv
+
+
+const tocarSom = (letra) => {
+    // vamos criar uma variavel do tipo audio pois não temos um  tag do tipo audio  no nosso html e esse audio precisa receber o endereço do som
+
+    const audio = new Audio(`./sounds/${sons[letra]} `)
+
+    ///agaora vou pedir para dar um play no audio
+    audio.play()
+}
+
+//Aqui como tenho que selecionar o elemento para adicionar a minha class "active" vou aproveitar que ja tenho expecificamente esse elemento em minha variavel :  const letra = evento.target.id e vou selecionalo atraves do getElementById e passar como seletor a variavel letra . E assim ja consigo selecionara a class active para a minha função (adicionarEfeito)
+const adicionarEfeito = (letra) => document.getElementById(letra)
+                                           .classList.add('active')
+
+
+//Esta função foi criada para remover a class ='Active'
+const removerEfeito = (letra) => {
+
+    //Aqui estamos pegando a div que foi clicada 
+    const div = document.getElementById(letra)
+
+    const removeActive = () => div.classList.remove('active')
+
+    // Aqui estamos aplicando o envento "transitionend" para que no final do evento ele chame a função removoeActive para assim remover a class="active" e fazendo assim ele vai esperar o evento terminar para remover a class pois senão fosse assim não daria tempo de adicionar e remover em uma fração de segundos
+    div.addEventListener('transitionend',removeActive)
+}
+
+//Função para ativar a Div: 
+
+const ativarDiv = (evento) => {
+    // console.log(evento)====> fiz esse comentario para mostrar que todo evento vem com uma target para identificarmos onde foi clicado  e se vc deixar o console.log(evento) descomentado e inspecionar / ir no console clicar em uma das divs criadas inspecionando o console vamos ver que ele vai dispara um evento e vamos ver que esse evento possui uma target de identificação pelos atributos criado no elemento criado
+
+    // console.log(evento.target.id)===> e com esse codigo consigo saber onde eu cliquei
+
+    //vamos armazenar em uma variavel e chamar de letra
+
+    // const letra = evento.target.id
+
+    //Como agora temos dois tipos de evento o do pointer e o do teclado e estamos usando a nossa constante letra  para receber o id do targert vamos ter usar  uma outra estrategia para captura o lemento tambem do teclado quando clicado e vamos usar um (if else)
+
+
+    //estou criando a constante letra fora do escopo da estrutura condicional para que ela exista no escopo global tambem e não somente no escopo local da estrutura condicional
+    let letra = ''
+    if(evento.type == 'click') {
+        letra = evento.target.id
+    }else{
+        //Quando o evento não for do tipo "click" a minha constante letra recebera o evento do teclado e estamos usando o "touppercase" para transformar em maiusculo pois o nosso jasom esta com as "key" em letras maiusculas
+         letra = evento.key.toUpperCase()
+    }
+    //Esse console esta aqui para eu conseguir observar o evento no console para a inspeção
+    console.log(evento)
+
+    //Agora quando for tocado na tecla queremos que toque o som referente a letra que foi clicada e precisamos de criar mais uma função
+
+    //A explicação para esse codigo abaixo que 'e uma avalidação esta no tempo do video 41:45'
+
+    //Com o codigo abaixo ele vai me retorna um valor boleano  pois a função hasOwnProperty vai verificar se a constante "letra que esta recebendo (evento.target.id)" se realmente existe se sim true se nao false por isso da estrutura condicional
+
+    const letrapermitida = sons.hasOwnProperty(letra)
+    if (letrapermitida){
+        adicionarEfeito(letra)
+
+        tocarSom(letra)
+
+        removerEfeito(letra)
+    }
+
+
+}
+
+
+exibir(sons)
+
+document.querySelector('#container')
+        .addEventListener('click',ativarDiv)
+
+///Agora vamos captura o evento das teclas e para quando o usuario clicalr nas teclas do teclado ele caputurar a tecla corresposndente a ativar o evento  e para fazer isso vamos executar: e vamos pegar direto no "windon" pois a "div" não tem ao evento clicar  se fosse caixa de texto até teria
+
+window.addEventListener('keydown',ativarDiv)
+//Quando for inspecionara dentro da função ativarDiv e coolcara dentro dela o console.log(evento) e clicar com a tecla do teclado vamos ver que o target será body e não vai me ajudar! e para conseguir o elemento que estamos clicando vamos usar o "key" 
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
